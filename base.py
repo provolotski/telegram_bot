@@ -45,9 +45,20 @@ def addLocation(user_id, longitude, latitude):
     conn.commit()
     cursor.close()
 
+
 def getLocation(user_id):
     conn = get_connect()
     cursor = conn.cursor()
-    cursor.execute("select longitude, latitude from locations where user_id =?",(str(user_id),))
-    result= cursor.fetchall()
-    return  result
+    cursor.execute("select longitude, latitude from locations where user_id =?", (str(user_id),))
+    result = cursor.fetchall()
+    return result
+
+
+def deleteUser(user_id):
+    conn = get_connect()
+    cursor = conn.cursor()
+    cursor.execute("delete from  locations where user_id = ?", (str(user_id),))
+    cursor.execute("delete from users where id = ?",(str(user_id),))
+    conn.commit()
+    cursor.close()
+    
