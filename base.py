@@ -14,7 +14,7 @@ def generate_scheme():
     pass
 
 
-def getUserId(tg_user_id):
+def get_user_id(tg_user_id):
     conn = get_connect()
     cursor = conn.cursor()
     rows = cursor.execute("select id from users where tg_id = ?", (str(tg_user_id),))
@@ -27,17 +27,17 @@ def getUserId(tg_user_id):
     return res
 
 
-def addUser(tg_user_id, first_name, user_name):
+def add_user(tg_user_id, first_name, user_name):
     conn = get_connect()
     cursor = conn.cursor()
     cursor.execute("insert into users (tg_id,first_name,user_name) values(?,?,?)",
                    (str(tg_user_id), first_name, user_name,))
     conn.commit()
     cursor.close()
-    return getUserId(tg_user_id=tg_user_id)
+    return get_user_id(tg_user_id=tg_user_id)
 
 
-def addLocation(user_id, longitude, latitude):
+def add_location(user_id, longitude, latitude):
     conn = get_connect()
     cursor = conn.cursor()
     cursor.execute("insert into locations (user_id, longitude, latitude)values (?, ?, ? )",
@@ -46,7 +46,7 @@ def addLocation(user_id, longitude, latitude):
     cursor.close()
 
 
-def getLocation(user_id):
+def get_location(user_id):
     conn = get_connect()
     cursor = conn.cursor()
     cursor.execute("select longitude, latitude from locations where user_id =?", (str(user_id),))
@@ -54,11 +54,10 @@ def getLocation(user_id):
     return result
 
 
-def deleteUser(user_id):
+def delete_user(user_id):
     conn = get_connect()
     cursor = conn.cursor()
-    cursor.execute("delete from  locations where user_id = ?", (str(user_id),))
-    cursor.execute("delete from users where id = ?",(str(user_id),))
+    cursor.execute("delete from locations where user_id = ?", (str(user_id),))
+    cursor.execute("delete from users where id = ?", (str(user_id),))
     conn.commit()
     cursor.close()
-    
